@@ -1,7 +1,7 @@
 ﻿using System;
 using CovidStat.Interfaces;
 using Microsoft.Extensions.Configuration;
-using Serilog;
+using NLog;
 
 namespace CovidStat.Services
 {
@@ -18,7 +18,9 @@ namespace CovidStat.Services
 
         public AdapterTagValueDto GetStatus()
         {
-            _logger.Information("hello!");
+            var rnd = new Random();
+            _logger.Information($"hello! {rnd.Next(0,100)}");
+            
             return new AdapterTagValueDto
             {
                 Value = _configuration["http:Host"],
