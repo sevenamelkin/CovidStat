@@ -1,5 +1,4 @@
 ﻿using CovidStat.Services;
-using CovidStat.Services;
 
 namespace CovidStat.Interfaces
 {

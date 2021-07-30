@@ -3,23 +3,20 @@ using Autofac;
 using CovidStat.Interfaces;
 using CovidStat.Services;
 using Microsoft.Extensions.Configuration;
-using Nancy;
-using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.Autofac;
-using Nancy.Serilog;
-using Nancy.TinyIoc;
+using NLog;
 using Serilog;
 
 namespace CovidStat.Nancy
 {
-    public class Bootstrapper : AutofacNancyBootstrapper//: BaseBootstrapper
+    public class Bootstrapper : AutofacNancyBootstrapper
     {
         private const string ConfigPath = "appsettings.json";
         
         protected override void ConfigureApplicationContainer(ILifetimeScope container)
         {
             var config = BuildConfiguration(ConfigPath);
-            var logger = CreateLogger(config);
+            var logger = CreateLogger();
             container.Update(builder =>
             {
                 builder.Register(c => config).As<IConfiguration>();
@@ -37,11 +34,12 @@ namespace CovidStat.Nancy
                 .Build();
         }
         
-        private static ILogger CreateLogger(IConfiguration configuration)
+        private static ILogger CreateLogger()
         {
-            return Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
-                .Enrich.WithProperty("CovidStat", "CovidStat")
+            return new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.File(@"log\log.txt", rollingInterval: RollingInterval.Day)
+                .WriteTo.Console()
                 .CreateLogger();
         }
     }
