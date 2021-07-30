@@ -1,5 +1,7 @@
 ﻿using System;
 using Autofac;
+using CovidStat.Interfaces;
+using CovidStat.Services;
 using Microsoft.Extensions.Configuration;
 using Nancy;
 using Nancy.Bootstrapper;
@@ -22,6 +24,7 @@ namespace CovidStat.Nancy
             {
                 builder.Register(c => config).As<IConfiguration>();
                 builder.Register(l => logger).As<ILogger>();
+                builder.RegisterType<BaseService>().As<IBaseService>();
             });
             base.ConfigureApplicationContainer(container);
         }
@@ -38,7 +41,7 @@ namespace CovidStat.Nancy
         {
             return Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)
-                .Enrich.WithProperty("Service", $"Adapter")
+                .Enrich.WithProperty("CovidStat", "CovidStat")
                 .CreateLogger();
         }
     }
