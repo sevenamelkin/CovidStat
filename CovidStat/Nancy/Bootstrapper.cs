@@ -5,39 +5,21 @@ using CovidStat.Services;
 using Microsoft.Extensions.Configuration;
 using Nancy.Bootstrappers.Autofac;
 using Serilog;
+using static CovidStat.Program;
 
 namespace CovidStat.Nancy
 {
     public class Bootstrapper : AutofacNancyBootstrapper
     {
-        private const string ConfigPath = "appsettings.json";
-        
         protected override void ConfigureApplicationContainer(ILifetimeScope container)
         {
-            var config = BuildConfiguration(ConfigPath);
-            var logger = CreateLogger();
             container.Update(builder =>
             {
-                builder.Register(c => config).As<IConfiguration>();
-                builder.Register(l => logger).As<ILogger>();
+                builder.Register(c => Configuration).As<IConfiguration>();
+                builder.Register(l => Logger).As<ILogger>();
                 builder.RegisterType<BaseService>().As<IBaseService>();
             });
             base.ConfigureApplicationContainer(container);
-        }
-        
-        private static IConfiguration BuildConfiguration(string configPath)
-        {
-            return new ConfigurationBuilder()
-                .SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile(configPath)
-                .Build();
-        }
-        
-        private static ILogger CreateLogger()
-        {
-            return new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .CreateLogger();
         }
     }
 }

@@ -12,6 +12,6 @@ namespace CovidStat.Interfaces
         /// </summary>
         /// <param name="requestDto"></param>
         /// <returns></returns>
-        Response GetCovidStatByIp(RequestDto requestDto);
+        ResponseDto GetCovidStatByIp(RequestDto requestDto);
     }
 }

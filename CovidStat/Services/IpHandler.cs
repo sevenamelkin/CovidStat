@@ -14,7 +14,7 @@ namespace CovidStat.Services
         /// <returns></returns>
         public static long ConvertIpToLong(this string addr)
         {
-            return (long) (uint) IPAddress.NetworkToHostOrder(
+            return (uint) IPAddress.NetworkToHostOrder(
                 (int) IPAddress.Parse(addr).Address);
         }
     }
