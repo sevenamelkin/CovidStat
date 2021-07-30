@@ -4,7 +4,6 @@ using CovidStat.Interfaces;
 using CovidStat.Services;
 using Microsoft.Extensions.Configuration;
 using Nancy.Bootstrappers.Autofac;
-using NLog;
 using Serilog;
 
 namespace CovidStat.Nancy
@@ -38,8 +37,6 @@ namespace CovidStat.Nancy
         {
             return new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .WriteTo.File(@"log\log.txt", rollingInterval: RollingInterval.Day)
-                .WriteTo.Console()
                 .CreateLogger();
         }
     }

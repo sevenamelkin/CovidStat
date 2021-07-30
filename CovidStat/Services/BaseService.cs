@@ -1,14 +1,15 @@
 ﻿using System;
+using CovidStat.Dto;
 using CovidStat.Interfaces;
 using Microsoft.Extensions.Configuration;
-using NLog;
+using Serilog;
 
 namespace CovidStat.Services
 {
     public class BaseService : IBaseService
     {
         private IConfiguration _configuration;
-        private ILogger _logger;
+        private readonly ILogger _logger;
         
         public BaseService(IConfiguration configuration, ILogger logger)
         {
@@ -16,26 +17,15 @@ namespace CovidStat.Services
             _logger = logger;
         }
 
-        public AdapterTagValueDto GetStatus()
+        public Response GetCovidStatByIp(RequestDto requestDto)
         {
             var rnd = new Random();
             _logger.Information($"hello! {rnd.Next(0,100)}");
             
-            return new AdapterTagValueDto
+            return new Response
             {
-                Value = _configuration["http:Host"],
-                Quality = "awesome virtual",
-                Timestamp = DateTime.Now
+                Text = "ok"
             };
-        }
-        
-        public class AdapterTagValueDto
-        {
-            public string Value { get; set; }
-
-            public string Quality { get; set; }
-
-            public DateTime Timestamp { get; set; }
         }
     }
 }
