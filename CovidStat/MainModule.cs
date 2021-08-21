@@ -1,4 +1,5 @@
-﻿using CovidStat.Interfaces;
+﻿using CovidStat.Dto;
+using CovidStat.Interfaces;
 using CovidStat.Utils;
 using Nancy;
 

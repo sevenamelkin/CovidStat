@@ -1,5 +1,4 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using CovidStat.Interfaces;
 using CovidStat.Services;
 using Microsoft.Extensions.Configuration;
