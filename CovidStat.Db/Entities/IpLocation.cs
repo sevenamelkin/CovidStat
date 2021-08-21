@@ -5,7 +5,7 @@ namespace CovidStat.Db.Entities
 	/// <summary>
 	/// Описание сущности для таблицы
 	/// </summary>
-	[Table("messages")]
+	[Table("messages", Schema = "public")]
     public class IpLocation
     {
 	    /// <summary>

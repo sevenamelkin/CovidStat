@@ -1,8 +1,9 @@
 ﻿using System;
+using CovidStat.Nancy;
 using Microsoft.Extensions.Configuration;
 using Nancy.Hosting.Self;
 using Serilog;
-using static CovidStat.Nancy.Bootstrapper;
+using static CovidStat.Constants;
 
 namespace CovidStat
 {
@@ -18,15 +19,19 @@ namespace CovidStat
             
             Logger = CreateLogger();
             
-            var uri = new UriBuilder(Uri.UriSchemeHttp,Configuration["http:host"], Convert.ToInt32(Configuration["http:port"])).Uri;
-            
-            using (var host = new NancyHost(uri))
+            var hostConfigs = new HostConfiguration()
             {
-                Logger.Information($"Try start nancy with address: {uri}");
-                host.Start();
-                Logger.Information("Nancy started");
-                Console.ReadLine();
-            }
+                UrlReservations = new UrlReservations() { CreateAutomatically = true }
+            };
+            var boostrapper = new Bootstrapper();
+            
+            var uri = new UriBuilder(Uri.UriSchemeHttp,Configuration[Host], Convert.ToInt32(Configuration[Port])).Uri;
+
+            using var host = new NancyHost(uri, boostrapper , hostConfigs);
+            Logger.Information($"Try start nancy with address: {uri}");
+            host.Start();
+            Logger.Information("Nancy started");
+            Console.ReadLine();
         }
         
         private static ILogger CreateLogger()
