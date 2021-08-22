@@ -11,6 +11,11 @@
         public const string NpgConnectionString = "NpgConnectionString";
 
         /// <summary>
+        /// Строка подключения в базе данных Redis
+        /// </summary>
+        public const string RedisConnectionString = "RedisConnectionString";
+
+        /// <summary>
         /// Хост сервиса
         /// </summary>
         public const string Host = HttpSection + "Host";
