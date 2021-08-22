@@ -31,15 +31,12 @@ namespace CovidStat.Services
         {
             _logger.Information($"{nameof(GetCovidStatByIp)} start");
             
-            var ipLocations = _dbContext.IpLocations;
-
-            foreach (var ipLocation in ipLocations)
-            {
-                _database.SetAdd("ipLocation", JsonConvert.SerializeObject(ipLocation));
-            }
-
-            _logger.Information($"input ip: {requestDto.IpAddress}");
+            var ipLocationsFromCache = _database.StringGet("ipLocation").ToString();
             
+            //var ipLocations = JsonConvert.DeserializeObject<IpLocation>(ipLocationsFromCache.ToString());
+            var ipLocations = _database.Get<List<IpLocation>>("ipLocation");
+            
+            _logger.Information($"input ip: {requestDto.IpAddress}");
             var numberIpFromRequest = requestDto.IpAddress.ConvertIpToLong();
 
             var response = ipLocations
@@ -49,6 +46,11 @@ namespace CovidStat.Services
             {
                 Text = response.CountryName
             };
+        }
+
+        public IpLocation GetIpLocation()
+        {
+            return new IpLocation();
         }
     }
 }

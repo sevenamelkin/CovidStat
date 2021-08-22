@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CovidStat.Db.Context;
 using CovidStat.Interfaces;
+using EFCache.Redis;
 using Newtonsoft.Json;
 using Serilog;
 using StackExchange.Redis;
@@ -41,8 +42,8 @@ namespace CovidStat.Services
                 }
                 catch (Exception e)
                 {
-                    _logger.Error($"{nameof(LoadCache)} is failed, wait 2min. for start a repeat");
-                    Task.Delay(TimeSpan.FromMinutes(2));
+                    _logger.Error($"{nameof(LoadCache)} is failed with message: {e.Message}, wait 2min. for start a repeat");
+                    Task.Delay(TimeSpan.FromMinutes(2)).Wait();
                 }
             }
         }
