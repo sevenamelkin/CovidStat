@@ -17,11 +17,9 @@ namespace CovidStat.Utils
         /// <returns></returns>
         public RequestDto ToDto(Request request)
         {
-            using (var sr = new StreamReader(request.Body))
-            using (var reader = new JsonTextReader(sr))
-            {
-                return new JsonSerializer().Deserialize<RequestDto>(reader);
-            }
+            using var sr = new StreamReader(request.Body);
+            using var reader = new JsonTextReader(sr);
+            return new JsonSerializer().Deserialize<RequestDto>(reader);
         }
     }
 }

@@ -22,10 +22,16 @@ namespace CovidStat.Services
 
         public ResponseDto GetCovidStatByIp(RequestDto requestDto)
         {
-            var gg = _dbContext.IpLocations.ToList();
+            var ipLocations = _dbContext.IpLocations.ToList();
+
+            var numberIpFromRequest = requestDto.IpAddress.ConvertIpToLong();
+
+            var response = ipLocations
+                .First(iplocation => iplocation.IpFrom < numberIpFromRequest && iplocation.IpTo > numberIpFromRequest);
+            
             return new ResponseDto
             {
-                Text = requestDto.IpAddress.ConvertIpToLong().ToString()
+                Text = response.CountryName
             };
         }
     }

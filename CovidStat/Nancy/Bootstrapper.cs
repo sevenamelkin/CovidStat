@@ -5,7 +5,9 @@ using CovidStat.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Nancy;
 using Nancy.Bootstrappers.Autofac;
+using Nancy.Configuration;
 using Serilog;
 using static CovidStat.Program;
 using static CovidStat.Constants;
@@ -25,6 +27,11 @@ namespace CovidStat.Nancy
                     .InstancePerLifetimeScope();;
             });
             base.ConfigureApplicationContainer(container);
+        }
+
+        public override void Configure(INancyEnvironment environment)
+        {
+            environment.Tracing(enabled: false, displayErrorTraces: true);
         }
 
         private static DbContextOptions GetDbOptions()

@@ -19,15 +19,16 @@ namespace CovidStat
             
             Logger = CreateLogger();
             
-            var hostConfigs = new HostConfiguration()
-            {
-                UrlReservations = new UrlReservations() { CreateAutomatically = true }
-            };
-            var boostrapper = new Bootstrapper();
+           // var hostConfigs = new HostConfiguration()
+          //  {
+           //     UrlReservations = new UrlReservations() { CreateAutomatically = true }
+           // };
+            //var boostrapper = new Bootstrapper();
             
             var uri = new UriBuilder(Uri.UriSchemeHttp,Configuration[Host], Convert.ToInt32(Configuration[Port])).Uri;
 
-            using var host = new NancyHost(uri, boostrapper , hostConfigs);
+            //using var host = new NancyHost(uri, boostrapper , hostConfigs);
+            using var host = new NancyHost(uri);
             Logger.Information($"Try start nancy with address: {uri}");
             host.Start();
             Logger.Information("Nancy started");
