@@ -26,10 +26,6 @@ namespace CovidStat
             
             using var host = new NancyHost(uri);
             Logger.Information($"Try start nancy with address: {uri}");
-
-            var cacheService = Container.Resolve<ICacheService>();
-            
-            cacheService.LoadCache();
             
             host.Start();
             Logger.Information("Nancy started");

@@ -8,7 +8,7 @@ namespace CovidStat.Services
     public static class IpHandler 
     {
         /// <summary>
-        /// Преобразовать ip-адрес в long-значение
+        /// Преобразовать ip-адрес в long
         /// </summary>
         /// <param name="addr"></param>
         /// <returns></returns>

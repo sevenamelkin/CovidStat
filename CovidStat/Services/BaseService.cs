@@ -17,7 +17,7 @@ namespace CovidStat.Services
         private IConfiguration _configuration;
         private readonly ILogger _logger;
         private readonly CovidStatDbContext _dbContext;
-        private IDatabase _database;
+        private readonly IDatabase _database;
 
         public BaseService(CovidStatDbContext context, IConfiguration configuration, ILogger logger, IDatabase database)
         {
@@ -30,27 +30,54 @@ namespace CovidStat.Services
         public ResponseDto GetCovidStatByIp(RequestDto requestDto)
         {
             _logger.Information($"{nameof(GetCovidStatByIp)} start");
-            
-            var ipLocationsFromCache = _database.StringGet("ipLocation").ToString();
-            
-            //var ipLocations = JsonConvert.DeserializeObject<IpLocation>(ipLocationsFromCache.ToString());
-            var ipLocations = _database.Get<List<IpLocation>>("ipLocation");
-            
-            _logger.Information($"input ip: {requestDto.IpAddress}");
-            var numberIpFromRequest = requestDto.IpAddress.ConvertIpToLong();
 
-            var response = ipLocations
-                .First(iplocation => iplocation.IpFrom < numberIpFromRequest && iplocation.IpTo > numberIpFromRequest);
-            
+            var numberIpFromRequest = requestDto.IpAddress.ConvertIpToLong();
+            var response = GetCountryByIp(numberIpFromRequest);
+
+            if (response is null)
+            {
+                return new ResponseDto
+                {
+                    Text = $"By input ip: {requestDto.IpAddress} county not defined"
+                };
+            }
+
             return new ResponseDto
             {
                 Text = response.CountryName
             };
         }
 
-        public IpLocation GetIpLocation()
+        private IpLocation GetCountryByIp(long ip)
         {
-            return new IpLocation();
+            _logger.Information($"{nameof(GetCountryByIp)} start with ip: {ip}");
+            var ipString = ip.ToString();
+            
+            var ipLocationFromCache = _database.StringGet(ipString);
+
+            if (!string.IsNullOrEmpty(ipLocationFromCache))
+            {
+                _logger.Information($"ip location by ip: {ipString} found in cache, return");
+                return JsonConvert.DeserializeObject<IpLocation>(ipLocationFromCache);
+            }
+
+            var ipLocationFromEf = _dbContext
+                .IpLocations
+                .FirstOrDefault(iplocation => iplocation.IpFrom < ip && iplocation.IpTo > ip);
+
+            if (ipLocationFromEf is null || ipLocationFromEf.CountryName.Equals("-"))
+            {
+                return null;
+            }
+            
+            var successfullyAddCache = _database.StringSet(ip.ToString(), JsonConvert.SerializeObject(ipLocationFromEf));
+
+            if (successfullyAddCache)
+            {
+                _logger.Information($"ip location by ip: {ipString} found in database and added to cache, return");
+            }
+            
+            return ipLocationFromEf;
         }
     }
 }

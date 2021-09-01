@@ -6,7 +6,7 @@ namespace CovidStat.Db.Entities
 	/// <summary>
 	/// Описание сущности для таблицы
 	/// </summary>
-	[Table("ip2location", Schema = "public")]
+	[Table("ip2location_db1", Schema = "public")]
     public class IpLocation
     {
 	    /// <summary>

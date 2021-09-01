@@ -29,7 +29,6 @@ namespace CovidStat.Nancy
                     .InstancePerLifetimeScope();;
                 builder.Register<ConnectionMultiplexer>(c => ConnectionMultiplexer.Connect(Configuration[RedisConnectionString])).SingleInstance();
                 builder.Register<IDatabase>(c => c.Resolve<ConnectionMultiplexer>().GetDatabase());
-                builder.RegisterType<CacheService>().As<ICacheService>().SingleInstance();
             });
             base.ConfigureApplicationContainer(container);
             Container = (IContainer) container;
