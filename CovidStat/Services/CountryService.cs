@@ -15,7 +15,7 @@ namespace CovidStat.Services
     public class CountryService : ICountryService
     {
         private readonly ILogger _logger;
-        private const string UrlRequest = "https://ap4234i.covid19api.com/country/";
+        private const string UrlRequest = "https://api.covid19api.com/country/";
 
         public CountryService(ILogger logger)
         {
