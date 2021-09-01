@@ -1,6 +1,6 @@
 ﻿using CovidStat.Interfaces;
-using CovidStat.Utils;
 using Nancy;
+using static CovidStat.Utils.RequestMapper;
 
 namespace CovidStat
 {
@@ -11,9 +11,7 @@ namespace CovidStat
     {
         public MainModule(IMainService mainService)
         {
-            var requestMapper = new RequestMapper();
-            
-            Post("/GetCovidStatByIp", x => mainService.GetCovidStatByIp(requestMapper.ToDto(Request)));
+            Post("/GetCovidStatByIp", x => mainService.GetCovidStatByIp(ToDto(Request)));
         }
     }
 }
