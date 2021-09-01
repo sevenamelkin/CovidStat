@@ -4,7 +4,6 @@ using CovidStat.Interfaces;
 using CovidStat.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Nancy;
 using Nancy.Bootstrappers.Autofac;
 using Nancy.Configuration;
@@ -17,21 +16,21 @@ namespace CovidStat.Nancy
 {
     public class Bootstrapper : AutofacNancyBootstrapper
     {
-        public static IContainer Container;
         protected override void ConfigureApplicationContainer(ILifetimeScope container)
         {
             container.Update(builder =>
             {
                 builder.Register(c => Configuration).As<IConfiguration>();
                 builder.Register(l => Logger).As<ILogger>();
-                builder.RegisterType<BaseService>().As<IBaseService>();
+                builder.RegisterType<CountryService>().As<ICountryService>();
+                builder.RegisterType<IpService>().As<IIpService>();
+                builder.RegisterType<MainService>().As<IMainService>();
                 builder.RegisterType<CovidStatDbContext>().WithParameter("options", GetDbOptions())
                     .InstancePerLifetimeScope();;
-                builder.Register<ConnectionMultiplexer>(c => ConnectionMultiplexer.Connect(Configuration[RedisConnectionString])).SingleInstance();
-                builder.Register<IDatabase>(c => c.Resolve<ConnectionMultiplexer>().GetDatabase());
+                builder.Register(c => ConnectionMultiplexer.Connect(Configuration[RedisConnectionString])).SingleInstance();
+                builder.Register(c => c.Resolve<ConnectionMultiplexer>().GetDatabase());
             });
             base.ConfigureApplicationContainer(container);
-            Container = (IContainer) container;
         }
 
         private static DbContextOptions GetDbOptions()

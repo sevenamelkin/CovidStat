@@ -5,13 +5,13 @@ namespace CovidStat.Interfaces
     /// <summary>
     /// Сервис обработки запроса
     /// </summary>
-    public interface IBaseService
+    public interface IMainService
     {
         /// <summary>
-        /// Метод обработки запроса
+        /// Главный метод обработки запроса
         /// </summary>
         /// <param name="requestDto"></param>
         /// <returns></returns>
-        ResponseDto GetCovidStatByIp(RequestDto requestDto);
+        Response GetCovidStatByIp(RequestDto requestDto);
     }
 }

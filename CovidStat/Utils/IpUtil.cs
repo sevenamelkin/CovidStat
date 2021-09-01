@@ -1,11 +1,11 @@
 ﻿using System.Net;
 
-namespace CovidStat.Services
+namespace CovidStat.Utils
 {
     /// <summary>
     /// Статический обработчик ip адресов
     /// </summary>
-    public static class IpHandler 
+    public static class IpUtil
     {
         /// <summary>
         /// Преобразовать ip-адрес в long

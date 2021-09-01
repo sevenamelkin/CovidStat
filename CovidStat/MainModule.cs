@@ -1,20 +1,19 @@
-﻿using CovidStat.Dto;
-using CovidStat.Interfaces;
+﻿using CovidStat.Interfaces;
 using CovidStat.Utils;
 using Nancy;
 
 namespace CovidStat
 {
+    /// <summary>
+    /// Модуль запросов
+    /// </summary>
     public sealed class MainModule : NancyModule
     {
-        private IBaseService _baseService;
-
-        public MainModule(IBaseService baseService)
+        public MainModule(IMainService mainService)
         {
-            _baseService = baseService;
             var requestMapper = new RequestMapper();
             
-            Post("/GetCovidStatByIp", x => _baseService.GetCovidStatByIp(requestMapper.ToDto(Request)));
+            Post("/GetCovidStatByIp", x => mainService.GetCovidStatByIp(requestMapper.ToDto(Request)));
         }
     }
 }

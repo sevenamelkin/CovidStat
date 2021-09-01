@@ -1,54 +1,29 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using CovidStat.Db.Context;
 using CovidStat.Db.Entities;
-using CovidStat.Dto;
 using CovidStat.Interfaces;
-using EFCache.Redis;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Serilog;
 using StackExchange.Redis;
 
 namespace CovidStat.Services
 {
-    public class BaseService : IBaseService
+    ///<inheritdoc cref = "IIpService"/>
+    public class IpService : IIpService
     {
-        private IConfiguration _configuration;
         private readonly ILogger _logger;
-        private readonly CovidStatDbContext _dbContext;
         private readonly IDatabase _database;
+        private readonly CovidStatDbContext _dbContext;
 
-        public BaseService(CovidStatDbContext context, IConfiguration configuration, ILogger logger, IDatabase database)
+        public IpService(CovidStatDbContext dbContext, ILogger logger, IDatabase database)
         {
-            _dbContext = context;
-            _configuration = configuration;
             _logger = logger;
             _database = database;
+            _dbContext = dbContext;
         }
 
-        public ResponseDto GetCovidStatByIp(RequestDto requestDto)
-        {
-            _logger.Information($"{nameof(GetCovidStatByIp)} start");
-
-            var numberIpFromRequest = requestDto.IpAddress.ConvertIpToLong();
-            var response = GetCountryByIp(numberIpFromRequest);
-
-            if (response is null)
-            {
-                return new ResponseDto
-                {
-                    Text = $"By input ip: {requestDto.IpAddress} county not defined"
-                };
-            }
-
-            return new ResponseDto
-            {
-                Text = response.CountryName
-            };
-        }
-
-        private IpLocation GetCountryByIp(long ip)
+        ///<inheritdoc />
+        public IpLocation GetCountryByIp(long ip)
         {
             _logger.Information($"{nameof(GetCountryByIp)} start with ip: {ip}");
             var ipString = ip.ToString();
@@ -70,7 +45,7 @@ namespace CovidStat.Services
                 return null;
             }
             
-            var successfullyAddCache = _database.StringSet(ip.ToString(), JsonConvert.SerializeObject(ipLocationFromEf));
+            var successfullyAddCache = _database.StringSet(ipString, JsonConvert.SerializeObject(ipLocationFromEf));
 
             if (successfullyAddCache)
             {
