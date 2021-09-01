@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CovidStat", "CovidStat\CovidStat.csproj", "{918CFAC0-6BB2-47E4-A2E3-23B05CA9B7F2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "source\CovidStat", "CovidStat\CovidStat.csproj", "{918CFAC0-6BB2-47E4-A2E3-23B05CA9B7F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CovidStat.Db", "CovidStat.Db\CovidStat.Db.csproj", "{28E98A89-FBAC-44F5-A5B3-33DE4C07A35B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "source\CovidStat.Db", "CovidStat.Db\CovidStat.Db.csproj", "{28E98A89-FBAC-44F5-A5B3-33DE4C07A35B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
