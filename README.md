@@ -1,8 +1,7 @@
 # Сервис получения ковид статистики по ip страны
+
 Запрос для создания таблицы:
 
-CREATE DATABASE ip2location WITH ENCODING 'UTF8';
-\c ip2location
 CREATE TABLE ip2location(
 	ip_from bigint NOT NULL,
 	ip_to bigint NOT NULL,
