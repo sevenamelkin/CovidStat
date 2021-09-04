@@ -26,6 +26,11 @@
         public const string Port = HttpSection + "Port";
         
         /// <summary>
+        /// Путь к серверу с статистикой
+        /// </summary>
+        public const string UrlRequest = "UrlRequest";
+        
+        /// <summary>
         /// Наименование раздела хоста и порта сервиса
         /// </summary>
         private const string HttpSection = "http:";
