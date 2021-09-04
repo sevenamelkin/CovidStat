@@ -2,8 +2,8 @@
 using CovidStat.Db.Context;
 using CovidStat.Db.Entities;
 using CovidStat.Interfaces;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Serilog;
 using StackExchange.Redis;
 
 namespace CovidStat.Services
@@ -11,13 +11,13 @@ namespace CovidStat.Services
     ///<inheritdoc cref = "IIpService"/>
     public class IpService : IIpService
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<IpService> _logger;
         private readonly IDatabase _database;
         private readonly CovidStatDbContext _dbContext;
 
-        public IpService(CovidStatDbContext dbContext, ILogger logger, IDatabase database)
+        public IpService(CovidStatDbContext dbContext, ILoggerFactory loggerFactory, IDatabase database)
         {
-            _logger = logger;
+            _logger = loggerFactory.CreateLogger<IpService>();
             _database = database;
             _dbContext = dbContext;
         }
@@ -25,14 +25,14 @@ namespace CovidStat.Services
         ///<inheritdoc />
         public IpLocation GetCountryByIp(long ip)
         {
-            _logger.Information($"{nameof(GetCountryByIp)} start with ip: {ip}");
+            _logger.LogInformation($"{nameof(GetCountryByIp)} start with ip: {ip}");
             var ipString = ip.ToString();
             
             var ipLocationFromCache = _database.StringGet(ipString);
 
             if (!string.IsNullOrEmpty(ipLocationFromCache))
             {
-                _logger.Information($"ip location by ip: {ipString} found in cache, return");
+                _logger.LogInformation($"ip location by ip: {ipString} found in cache, return");
                 return JsonConvert.DeserializeObject<IpLocation>(ipLocationFromCache);
             }
 
@@ -49,7 +49,7 @@ namespace CovidStat.Services
 
             if (successfullyAddCache)
             {
-                _logger.Information($"ip location by ip: {ipString} found in database and added to cache, return");
+                _logger.LogInformation($"ip location by ip: {ipString} found in database and added to cache, return");
             }
             
             return ipLocationFromEf;

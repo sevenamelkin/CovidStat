@@ -2,20 +2,20 @@
 using CovidStat.Dto;
 using CovidStat.Interfaces;
 using CovidStat.Utils;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace CovidStat.Services
 {
     ///<inheritdoc />
     public class MainService : IMainService
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<MainService> _logger;
         private readonly IIpService _ipService;
         private readonly ICountryService _countryService;
 
-        public MainService(ILogger logger, IIpService ipService, ICountryService countryService)
+        public MainService(ILoggerFactory loggerFactory, IIpService ipService, ICountryService countryService)
         {
-            _logger = logger;
+            _logger = loggerFactory.CreateLogger<MainService>();
             _ipService = ipService;
             _countryService = countryService;
         }
@@ -25,7 +25,7 @@ namespace CovidStat.Services
         {
             try
             {
-                _logger.Information($"{nameof(GetCovidStatByIp)} start");
+                _logger.LogInformation($"{nameof(GetCovidStatByIp)} start");
 
                 var numberIpFromRequest = requestDto.Ip.ConvertIpToLong();
                 var response = _ipService.GetCountryByIp(numberIpFromRequest);
@@ -42,7 +42,7 @@ namespace CovidStat.Services
             }
             catch (Exception e)
             {
-                _logger.Error(e.Message);
+                _logger.LogError(e.Message);
                 return new Response
                 {
                     ErrorText = e.Message
